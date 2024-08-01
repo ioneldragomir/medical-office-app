@@ -1,0 +1,8 @@
+.icon-red {
+  color: var(--red-300) !important;
+}
+
+::ng-deep .p-fileupload .p-fileupload-buttonbar .p-button {
+  width: 160px !important;
+  margin-top: 8px;
+}

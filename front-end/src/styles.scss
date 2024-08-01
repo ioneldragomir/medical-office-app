@@ -1,0 +1,78 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Lora&family=News+Cycle&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=News+Cycle&display=swap");
+@import "~bootstrap/scss/bootstrap";
+
+body {
+  // font-family: "Lora", serif;
+  // font-family: "Source Sans Pro", sans-serif;
+  // font-family: "News Cycle", sans-serif;
+  // font-family: "Comfortaa", cursive;
+  font-family: 'Quicksand', sans-serif;
+  //font-family: "News Cycle", sans-serif;
+}
+
+i {
+  color: var(--teal-400);
+}
+
+.form-text {
+  color: var(--red-500);
+  font-size: 14px;
+  padding-left: 4px;
+}
+
+.star {
+  color: var(--teal-400);
+}
+
+.p-inputtext.ng-dirty.ng-invalid{
+  border-color: var(--red-200);
+}
+
+p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
+  border-color: var(--red-200);
+}
+
+p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
+  border-color: var(--red-200);
+}
+
+p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
+  border-color: var(--red-200);
+}
+
+p-password.ng-invalid.ng-dirty > .p-password > .p-inputtext {
+  border-color: var(--red-200)
+}
+
+table {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.p-dialog .p-dialog-header {
+  background-color: var(--teal-200);
+  font-family: 'Quicksand', sans-serif;
+  color: white;
+  .p-dialog-header-icon:enabled  {
+    color: white;
+  }
+
+  .p-dialog-header-icon:enabled:hover  {
+    color: var(--teal-200);
+  }
+}
+
+.p-dialog .p-dialog-content {
+  padding-top: 28px;
+  padding-bottom: 0;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.p-dialog .p-dialog-footer {
+  font-family: 'Quicksand', sans-serif;
+  padding: 0;
+}

@@ -1,0 +1,108 @@
+<div class="col-12 m-0 p-0">
+  <div class="row title-borders">
+    <div class="col-12 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Mesaje primite</h3>
+    </div>
+  </div>
+  <div class="row justify-content-center fadein animation-duration-300">
+    <div class="col-12 m-0 p-0">
+      <p-table #dt [value]="filteredContactMessages" responsiveLayout="scroll"
+        [loading]="isLoading" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [rowHover]="true"
+        [globalFilterFields]="['name','email', 'date']" [(selection)]="selectedItems" >
+        <ng-template pTemplate="caption">
+          <div class="row justify-content-end">
+            <div class="col-12 p-0 ps-3 flex align-items-center">
+              <p class="fw-bold m-0 p-0 fs-5">Filtrare</p>
+              <i class="fa-solid fa-filter ml-2"></i>
+              <i (click)="deleteItems()" pTooltip="Șterge selecție" class="fa-solid fa-trash icon-red ml-2 cursor-pointer" *ngIf="this.selectedItems && this.selectedItems.length"></i>
+            </div>
+            <p-divider styleClass="m-0 mb-3"></p-divider>
+            <div class="col-lg-6">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input pInputText #input type="text" class="w-100" (input)="filterGlobal($event, 'startsWith')" placeholder="Căutare" />
+              </span>
+            </div>
+            <div class="col-md-6 mt-2 mt-md-0">
+              <p-dropdown id="status" [showClear]="true" [options]="statusOptions" optionLabel="name" styleClass="w-100" placeholder="Căutare după status"
+              (onChange)="filterGlobalStatus($event)">
+              </p-dropdown>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="text-center" pSortableColumn="name" >Nume<p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="date">Dată<p-sortIcon field="date"></p-sortIcon>
+            </th> 
+            <th class="text-center" pSortableColumn="viewed">Stauts<p-sortIcon field="viewed"></p-sortIcon>
+            </th>
+            <th class="text-center">Opțiuni</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-message>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="message"></p-tableCheckbox>
+          </td>
+            <td class="text-center">{{message.name}}</td>
+            <td class="text-center">{{message.email}}</td>
+            <td class="text-center">{{message.date}}</td>
+            <td class="text-center">
+              <div class="fw-bold text-white p-1 rounded" [ngClass]="{'bg-green-200': message.viewed === 'true', 'bg-pink-200': message.viewed !== 'true'}">
+                {{message.viewed | viewed}}
+              </div>
+            </td>
+            <td class="text-center">
+              <button pButton pRipple icon="fa-solid fa-circle-info" class="mr-2 p-button-text text-orange-300 fs-5" (click)="editItem(message)" pTooltip="Detalii"></button>
+              <button pButton pRipple icon="fa-solid fa-trash" class="icon-red p-button-danger p-button-text fs-5" (click)="deleteItem(message)" pTooltip="Șterge"></button>
+          </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="this.numberOfCols">
+               Nu există mesaje
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-dialog header="Detalii" [dismissableMask]="true" [(visible)]="isDialogVisible" [breakpoints]="{'960px': '75vw', '640px': '95vw'}" [style]="{width: '50vw'}"
+        [modal]="true">
+        <div class="row fadein animation-duration-300">
+          <div class="col-md-6">
+            <label class="fw-bold">Nume</label>
+            <input pInputText class="w-100 border-none" [value]="this.selectedItem?.name" disabled="true"/>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label class="fw-bold">Email</label>
+            <input pInputText class="w-100 border-none" [value]="this.selectedItem?.email" disabled="true"/>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label class="fw-bold">Dată</label>
+            <input pInputText class="w-100 border-none" [value]="this.selectedItem?.date" disabled="true"/>
+          </div>
+          <div class="col-sm-6 mt-2">
+            <label class="fw-bold">Status</label>
+            <input pInputText class="w-100 border-none" [value]="this.selectedItem?.viewed |viewed" disabled="true"/>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label class="fw-bold">Mesaj</label>
+            <textarea rows="3" pInputTextarea class="w-100 border-none" [value]="this.selectedItem?.message" disabled="true"></textarea>
+          </div>
+        </div>
+        <ng-template pTemplate="footer">
+          <div class="p-3">
+            <button *ngIf="this.selectedItem?.viewed === 'false'"  pButton pRipple icon="fa-solid fa-check" class="p-button-success w-100 p-button-outlined" (click)="viewItem()" pTooltip="Marchează ca văzut"></button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</div>

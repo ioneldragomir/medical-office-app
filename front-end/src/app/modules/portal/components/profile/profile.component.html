@@ -1,0 +1,130 @@
+<div class="col-12 m-0 p-0">
+  <div class="row title-borders">
+    <div class="col-lg-4 col-md-5 col-sm-6 col-7 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Profil</h3>
+    </div>
+  </div>
+  <div class="row mt-4 justify-content-center fadein animation-duration-300">
+    <div class="col-lg-8 col-xl-6 col-md-10 p-5">
+      <form [formGroup]="profileForm">
+        <div class="col-lg-6 col-md-7 col-sm-8 col-9 bg-teal-200 text-white p-2 text-end rounded pe-3" *ngIf="this.user.type === 'pacient'">
+          <h4 class="m-0">Date cont</h4>
+        </div>
+        <div class="row mt-3" formGroupName="common" *ngIf="this.user.type === 'pacient'">
+          <div class="col-md-6 mt-2">
+            <label for="lastName" class="fw-bold">Nume<span class="star"> *</span></label>
+            <input id="lastName" type="text" class="w-100" pInputText formControlName="lastName"
+              placeholder="Numele" [ngClass]="{
+                'ng-invalid ng-dirty': lastName.invalid && lastName.touched
+              }" />
+            <div *ngIf="lastName.invalid && lastName.touched">
+              <span class="form-text" *ngIf="lastName.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="
+              lastName.hasError('maxlength')
+                ">Ați depășit limita maximă de 24 de caractere.</span>
+            </div>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label for="firstName" class="fw-bold">Prenume<span class="star"> *</span></label>
+            <input id="firstName" type="text" class="w-100" pInputText formControlName="firstName"
+              placeholder="Prenumele" [ngClass]="{
+                'ng-invalid ng-dirty': firstName.invalid && firstName.touched
+              }" />
+            <div *ngIf="firstName.invalid && firstName.touched">
+              <span class="form-text" *ngIf="firstName.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="
+              firstName.hasError('maxlength')
+                ">Ați depășit limita maximă de 24 de caractere.</span>
+            </div>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label for="phoneNumber" class="fw-bold">Telefon<span class="star"> *</span></label>
+            <input id="phoneNumber" type="text" class="w-100" pInputText formControlName="phoneNumber"
+              placeholder="Telefon" pattern="\d*" [ngClass]="{
+                'ng-invalid ng-dirty':
+                  phoneNumber.invalid && phoneNumber.touched
+              }" />
+            <div *ngIf="phoneNumber.invalid && phoneNumber.touched">
+              <span class="form-text" *ngIf="phoneNumber.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="phoneNumber.hasError('maxlength') || phoneNumber.hasError('minlength')">Câmpul trebuie sa aibă 10 caractere.</span>
+              <span class="form-text" *ngIf="phoneNumber.hasError('pattern')">Sunt permise doar cifre.</span>
+            </div>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label for="email" class="fw-bold">Email<span class="star"> *</span></label>
+            <input type="email" id="email" pInputText class="w-100" formControlName="email"
+              placeholder="email@test.com" [ngClass]="{
+                'ng-invalid ng-dirty': email.invalid && email.touched
+              }" />
+            <div *ngIf="email.invalid && email.touched">
+              <span class="form-text" *ngIf="email.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="email.hasError('taken')">Emailul este deja folosit.</span>
+              <span class="form-text" *ngIf="
+                  email.hasError('email') && !email.hasError('maxlength')
+                ">Emailul trebuie să fie valid.</span>
+              <span class="form-text" *ngIf="email.hasError('maxlength')">Ați depășit limita maximă de 52 de
+                caractere.</span>
+            </div>
+          </div>
+        </div>
+        <div class="div" *ngIf="this.user.type === 'pacient'">
+          <div class="row justify-content-end" *ngIf="!this.isEdit">
+            <div class="col-md-6 col-12 mt-3 mb-md-2 mb-3" >
+                <button pButton type="button" label="Modificare date" class="w-100" (click)="onStartEdit()"></button>
+            </div>
+          </div>
+          <div class="row justify-content-end" *ngIf="this.isEdit">
+            <div class="col-md-6 col-12 mt-md-3 mt-2 mb-md-2">
+              <button pButton type="button" label="Renunțare" class="w-100 p-button-danger" (click)="onCancelEdit()"></button>
+            </div>
+            <div class="col-md-6 col-12 mt-md-3 mb-md-2">
+              <button pButton type="button" label="Confirmare" class="w-100 p-button-success" (click)="onSaveEdit()"></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-7 col-sm-8 col-9 bg-teal-200 text-white p-2 text-end mt-md-3 mt-2 rounded pe-3">
+          <h4 class="m-0">Modificare parolă</h4>
+        </div>
+        <div class="row mt-3" formGroupName="passwordReset">
+          <div class="col-md-12 mt-4">
+            <label for="password" class="fw-bold">Parolă<span class="star"> *</span></label>
+            <p-password type="password" styleClass="w-100" [toggleMask]="true" formControlName="password"
+              placeholder="Parolă" [ngClass]="{
+                'ng-invalid ng-dirty': password.invalid && password.touched
+              }"></p-password>
+             
+            <div *ngIf="password.invalid && password.touched">
+              <span class="form-text" *ngIf="password.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="password.hasError('maxlength') || password.hasError('minlength')">Câmpul trebuie sa aibă între 6 și 32 de caractere.</span>
+            </div>  
+          </div>
+          <div class="col-md-12 mt-4">
+            <label for="passwordConfirm" class="fw-bold">Confirmare parolă<span class="star"> *</span></label>
+            <p-password type="password" id="passwordConfirm" [feedback]="false" [toggleMask]="true" styleClass="w-100" formControlName="passwordConfirm"
+              placeholder="Confirmare parolă" [ngClass]="{
+                'ng-invalid ng-dirty': passwordConfirm.invalid && passwordConfirm.touched
+              }"></p-password>
+             
+            <div *ngIf="passwordConfirm.invalid && passwordConfirm.touched">
+              <span class="form-text" *ngIf="passwordConfirm.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="passwordConfirm.hasError('maxlength') || passwordConfirm.hasError('minlength')">Câmpul trebuie sa aibă între 6 și 32 de caractere.</span>
+              <span class="form-text" *ngIf="passwordConfirm.hasError('invalid')">Parolele nu corespund.</span>  
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mt-3">
+            <p-messages [(value)]="msgs"></p-messages>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-md-2">
+            <button pButton type="button" label="Modificare parolă" class="w-100" (click)="onResetPassword()"></button>
+          </div>
+        </div>
+        
+      </form>
+
+    </div>
+  </div>
+</div>

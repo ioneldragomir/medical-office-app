@@ -1,0 +1,12 @@
+::ng-deep .p-accordion-header-link  {
+  background-color: var(--teal-400) !important;
+  border: 0 !important;
+  font-weight: bold !important;
+  color: white !important;
+  margin-top: 22px;
+}
+
+::ng-deep .p-accordion-content {
+  border: 0 !important;
+  padding-top: 22px !important;
+}

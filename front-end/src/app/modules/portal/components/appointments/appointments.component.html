@@ -1,0 +1,270 @@
+
+  <div class="row title-borders ">
+    <div class="col-6 bg-teal-200 text-white">
+      <i (click)="toggleAddEmployee()" *ngIf="user.type !== 'pacient' && user.type !== 'doctor'" 
+        class="fadein animation-duration-300 fa-solid fa-circle-plus mr-2 text-white text-5xl pt-1 pl-2 cursor-pointer"></i>
+    </div>
+    <div class="col-6 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Programări</h3>
+    </div>
+    <div class="col-12 bg-blue-200 text-white fs-5 flex  justify-content-between" *ngIf="filterPacientId">
+      <p class="m-0 p-0">Momentan sunt afișate programările pacientului <span class="fw-bold">{{getPacientNameFromId(filterPacientId)}}</span></p>
+      <p-button pRipple icon="fa-solid fa-person-circle-xmark" styleClass="p-button-outlined ms-4 fadein animation-duration-300 p-0 m-0 text-white cursor-pointer p-1" label="Afișează toate programările" iconPos="right"
+      (click)="resetFilterPacient()"></p-button>
+    </div>
+  
+  </div>
+  <div class="row fadein animation-duration-300 overflow-auto">
+    <div class="col-12 m-0 p-0">
+      <p-table  #dt [value]="filteredAppointments" responsiveLayout="scroll" [loading]="isLoading" [rows]="10" 
+        [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [rowHover]="true"
+        [globalFilterFields]="['name','phoneNumber', 'date', 'message']"  styleClass="min-height-table">
+        <ng-template pTemplate="caption">
+          <div class="row justify-content-end">
+            <div class="col-12 p-0 ps-3 flex align-items-center">
+              <p class="fw-bold m-0 p-0 fs-5">Filtrare</p>
+              <i class="fa-solid fa-filter ml-2"></i>
+            </div>
+            <p-divider styleClass="m-0 mb-3"></p-divider>
+            <div class="col-lg-6">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input pInputText #input type="text" class="w-100" (input)="filterGlobal($event, 'startsWith')"
+                  placeholder="Căutare" />
+              </span>
+            </div>
+            <div class="col-md-6 mt-2 mt-md-0">
+              <p-dropdown id="status" [showClear]="true" [options]="appointmentStatusOptions" optionLabel="name" styleClass="w-100"
+                placeholder="Căutare după status" (onChange)="filterGlobalType($event)">
+              </p-dropdown>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center" pSortableColumn="name">Nume complet<p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="phoneNumber">Telefon<p-sortIcon field="phoneNumber"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="date">Dată<p-sortIcon field="date"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th class="text-center" *ngIf="user.type !== 'pacient'">Pacient</th>
+            <th class="text-center">Opțiuni</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-appointment>
+          <tr>
+            <td class="text-center">{{appointment.name}}</td>
+            <td class="text-center">{{appointment.phoneNumber}}</td>
+            <td class="text-center">{{appointment.date}}</td>
+            <td class="text-center">
+              <div class="fw-bold text-white p-1 rounded" [ngClass]="{'bg-orange-200': appointment.status === 'programat', 'bg-purple-200': appointment.status === 'confirmat'
+            , 'bg-green-200': appointment.status === 'prezentat', 'bg-pink-200': appointment.status === 'neprezentat'}">
+            {{appointment.status | titlecase}}
+              </div>
+            </td>
+            <td class="text-center" *ngIf="user.type !== 'pacient'">
+              <p-button styleClass="p-button-sm bg-blue-200 border-none m-0 p-2 w-10rem" [label]="appointment.pacientId ? getPacientNameFromId(appointment.pacientId) : 'Atribuie un pacient'" (click)="op.toggle($event); selectedItem = appointment; selectedPacient=getPacientObjectFromId(appointment.pacientId)"></p-button>
+            </td>
+            <td class="text-center">
+              <button pButton pRipple icon="fa-solid fa-circle-info" class="mr-2 p-button-text text-orange-300 fs-5"
+                pTooltip="Detalii" (click)="viewItem(appointment)"></button>
+              <button *ngIf="user.type !== 'pacient' && user.type !== 'doctor'" pButton pRipple icon="fa-solid fa-circle-xmark" class="icon-red p-button-danger p-button-text fs-5"
+                pTooltip="Șterge" (click)="deleteItem(appointment)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="this.numberOfCols">
+              Nu există programări
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '50vh'}">
+        <ng-template pTemplate>
+          <p-table #dtPacients [value]="pacients" selectionMode="single" [(selection)]="selectedPacient" (onRowSelect)="onRowSelect($event )" [paginator]="true" [rows]="5" responsiveLayout="scroll"
+        [globalFilterFields]="['lastName','firstName', 'phoneNumber', 'email']">
+        <ng-template pTemplate="caption">
+          <div class="row justify-content-end align-items-center m-0 p-0">
+            <div class="col-xl-8 m-0" [ngClass]="{'col-xl-12': !selectedItem.pacientId}">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input pInputText #input type="text" class="w-100" (input)="filterGlobalPacients($event, 'startsWith')"
+                  placeholder="Căutare" />
+              </span>
+            </div>
+            <div class="col-xl-4 mt-2 m-xl-0" *ngIf="selectedItem.pacientId">
+              <p-button pRipple icon="fa-solid fa-person-circle-xmark" styleClass="w-100 bg-pink-200 border-none p-2 fadein animation-duration-300 text-white cursor-pointer" label="Elimină pacient" iconPos="right"
+              (click)="deleteAppointmentPacient()"></p-button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center" pSortableColumn="lastName">Nume<p-sortIcon field="lastName"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="firstName">Prenume<p-sortIcon field="firstName"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="phoneNumber">Telefon<p-sortIcon field="phoneNumber"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pacient let-rowData>
+          <tr [pSelectableRow]="rowData">
+            <td class="text-center">{{pacient.lastName}}</td>
+            <td class="text-center">{{pacient.firstName}}</td>
+            <td class="text-center">{{pacient.email ? pacient.email : 'nu există email'}}</td>
+            <td class="text-center">{{pacient.phoneNumber}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="this.numberOfCols">
+              Nu există pacienți
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+        </ng-template>
+    </p-overlayPanel>
+      <p-dialog [header]="dialogHeader" [dismissableMask]="true" [(visible)]="isDialogVisible"
+        [breakpoints]="{'2000px': '50vw', '960px': '75vw', '640px': '95vw'}" [style]="{width: '25vw'}"
+        [modal]="true">
+          <form [formGroup]="appointmentForm" class="fadein animation-duration-300">
+            <div class="row mb-3">
+              <div class="col-md-6 mt-2" *ngIf="user.type !== 'doctor' && user.type !== 'pacient'">
+                <label for="name" class="fw-bold">Nume complet<span class="star"> *</span></label>
+                <input id="name" type="text" class="w-100" pInputText formControlName="name"
+                  placeholder="Numele" [ngClass]="{
+                    'ng-invalid ng-dirty': name.invalid && name.touched
+                  }" />
+                <div *ngIf="name.invalid && name.touched">
+                  <span class="form-text" *ngIf="name.hasError('required')">Câmpul este obligatoriu.</span>
+                  <span class="form-text" *ngIf="
+                  name.hasError('maxlength')
+                    ">Ați depășit limita maximă de 48 de caractere.</span>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2" *ngIf="user.type !== 'doctor' && user.type !== 'pacient'">
+                <label for="phoneNumber" class="fw-bold">Telefon<span class="star"> *</span></label>
+                <input id="phoneNumber" type="text" class="w-100" pInputText formControlName="phoneNumber"
+                  placeholder="Telefon" pattern="\d*" [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      phoneNumber.invalid && phoneNumber.touched
+                  }" />
+                <div *ngIf="phoneNumber.invalid && phoneNumber.touched">
+                  <span class="form-text" *ngIf="phoneNumber.hasError('required')">Câmpul este obligatoriu.</span>
+                  <span class="form-text"
+                    *ngIf="phoneNumber.hasError('maxlength') || phoneNumber.hasError('minlength')">Câmpul trebuie sa
+                    aibă
+                    10 caractere.</span>
+                  <span class="form-text" *ngIf="phoneNumber.hasError('pattern')">Sunt permise doar cifre.</span>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2" [ngClass]="{'col-md-12': mode === 'add' || user.type === 'pacient'}" *ngIf="user.type !== 'doctor'">
+                <label for="doctor" class="fw-bold">Medic<span class="star"> *</span></label>
+                <p-dropdown id="doctor" [filter]="true" [resetFilterOnHide]="true" [options]="doctorsOptions" optionLabel="name" styleClass="w-100" formControlName="doctor"
+                  placeholder="Alege un medic" [ngClass]="{
+                    'ng-invalid ng-dirty': doctor.invalid && doctor.touched
+                  }"></p-dropdown>
+                <div *ngIf="doctor.invalid && doctor.touched">
+                  <span class="form-text" *ngIf="doctor.hasError('required')">Câmpul este obligatoriu.</span>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2" *ngIf="mode!== 'add' && user.type !== 'doctor' && user.type !== 'pacient'">
+                <label for="status" class="fw-bold">Status<span class="star"> *</span></label>
+                <p-dropdown id="status" [options]="appointmentStatusOptions" optionLabel="name" styleClass="w-100"
+                  formControlName="status" placeholder="Alegeți statusul" [ngClass]="{
+                  'ng-invalid ng-dirty':
+                  status.invalid && status.touched
+                }"></p-dropdown>
+
+              </div>
+              <div class="col-md-12 mt-2" *ngIf="user.type !== 'doctor' && user.type !== 'pacient'">
+                <label for="date" class="fw-bold">Dată<span class="star"> *</span></label>
+                <p-calendar [showIcon]="true" [defaultDate]="defaultDate" [showTime]="true" [stepMinute]="15" inputId="icon" inputId="date" styleClass="w-100" formControlName="date"
+                  placeholder="Alege data programării" [ngClass]="{
+                    'ng-invalid ng-dirty': date.invalid && date.touched
+                  }"></p-calendar>
+                <div *ngIf="date.invalid && date.touched">
+                  <span class="form-text" *ngIf="date.hasError('required')">Câmpul este obligatoriu.</span>
+                </div>
+              </div>
+              <div class="col-md-12 mt-2">
+                <label for="mesaj" class="fw-bold">Mesaj</label>
+                <textarea id="mesaj" rows="8" pInputTextarea class="w-100" formControlName="message"></textarea>
+              </div>
+            </div>
+          </form>
+          <div class="row fadein animation-duration-300 mb-3" *ngIf="mode !=='add'">
+            <div class="col-sm-12 mb-3">
+              <label for="file" class="fw-bold text-white bg-teal-200 p-3 rounded">Fișa consultației</label>
+            </div>
+            <div class="col-sm-12 mb-3" *ngIf="user.type !== 'pacient'">
+                <p-fileUpload invalidFileTypeMessageSummary='Tipul fișierului încărcat este invalid.' invalidFileTypeMessageDetail="Se permit doar documente pdf."
+                #ref name="file" styleClass="w-100 p-2 fs-6 bg-green-300 border-none" [auto]="true" mode="basic" accept="application/pdf" [customUpload]="true" (uploadHandler)="uploadAppointmentFile($event, ref)"></p-fileUpload>
+            </div>
+            <div class="col-sm-6" *ngIf="selectedItem?.appointmentFile" [ngClass]="{'col-sm-12': user.type === 'pacient'}">
+              <button pButton type="button" label="Deschide fișa consultației" class="p-button-sm w-100 bg-blue-300 border-none"
+                  (click)="getAppointmentFile()"></button> 
+            </div>
+            <div class="col-sm-6" *ngIf="selectedItem?.appointmentFile">
+              <button *ngIf="user.type !== 'pacient'" pButton type="button" label="Elimină fișa consultației" class="p-button-sm w-100 bg-pink-300 border-none"
+              (click)="deleteAppointmentFile()"></button>
+            </div>
+            <div class="col-12 text-center" *ngIf="!selectedItem?.appointmentFile"> 
+              <span>Nu există fișa consultației pentru programarea selectată.</span>
+            </div>
+          </div>
+          <div class="row fadein animation-duration-300 mb-3 border-top pt-3" *ngIf="mode !=='add'">
+            <div class="col-sm-12 mb-3">
+              <label for="file" class="fw-bold text-white p-3 bg-teal-200 rounded">{{(selectedItem?.file) ? (user.type !== 'pacient' ? 'Modifică' : 'Vizualizeză') : 'Adaugă'}} fișier extra pentru programarea selectată</label>
+            </div>
+            <div class="col-sm-12 mb-3" *ngIf="user.type !== 'pacient'">
+              <p-fileUpload invalidFileTypeMessageSummary='Tipul fișierului încărcat este invalid.' invalidFileTypeMessageDetail="Se permit doar documente pdf."
+              #ref name="file" styleClass="w-100 p-2 fs-6 bg-orange-300 border-none" [auto]="true" mode="basic" accept="application/pdf" [customUpload]="true" (uploadHandler)="uploadFile($event, ref)"></p-fileUpload>
+            </div>
+            <div class="col-sm-6" *ngIf="selectedItem?.file" [ngClass]="{'col-sm-12': user.type === 'pacient'}">
+              <button pButton type="button" label="Deschide fișierul salvat" class="bg-blue-300 border-none p-button-sm w-100 p-button-success"
+                  (click)="getFile()"></button> 
+            </div>
+            <div class="col-sm-6" *ngIf="selectedItem?.file">
+              <button *ngIf="user.type !== 'pacient'" pButton type="button" label="Elimină fișier" class="bg-pink-300 border-none p-button-sm w-100 p-button-success"
+              (click)="deleteFile()"></button>
+            </div>
+            <div class="col-12 text-center" *ngIf="!selectedItem?.file"> 
+              <span>Nu există fișier pentru programarea selectată.</span>
+            </div>
+          </div>
+        <ng-template pTemplate="footer">
+          <div class="p-3">
+            <div class="div" *ngIf="user.type !== 'pacient'&& user.type !== 'doctor'">
+              <div class="row justify-content-end m-0 p-0"  *ngIf="this.mode === 'view'">
+                <div class="col-md-6 col-12 m-0 p-0">
+                  <button pButton type="button" label="Modificare date" class="w-100" (click)="onToggleEdit()"></button>
+                </div>
+              </div>
+              <div class="row justify-content-end m-0 p-0" *ngIf="this.mode === 'edit'">
+                <div class="col-md-6 col-12 m-0 pt-0 ps-0 pb-0">
+                  <button pButton type="button" label="Renunțare" class="w-100 p-button-danger"
+                    (click)="onCancelEdit()"></button>
+                </div>
+                <div class="col-md-6 col-12 m-0 p-0">
+                  <button pButton type="button" label="Confirmare" class="w-100 p-button-success"
+                    (click)="onSubmit()"></button>
+                </div>
+              </div>
+            </div>
+            <button *ngIf="this.mode === 'add'" pButton type="button" label="Adăugare" class="w-100"
+              (click)="onSubmit()"></button>
+          </div>
+        </ng-template>
+      </p-dialog>
+
+

@@ -1,0 +1,90 @@
+<div class="col-12 m-0 p-0" style="min-height: 88vh">
+  <div class="row title-borders">
+    <div class="col-lg-4 col-md-5 col-sm-6 col-7 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Programări</h3>
+    </div>
+  </div>
+  <div class="row justify-content-center mx-2 mt-3 fadein animation-duration-300">
+    <div class="col-md-10 col-12">
+      <p class="fw-bold">Pacienții care au mai puțin de 14 zile de la intrarea în țară, chiar dacă sunt asimptomatici sau nu vin dintr-o zonă cu risc, sunt rugați să se programeze la o dată ulterioră terminări celor 14 zile pentru a nu risca infectarea cu virusul SARS-CoV-2 a pacinenților și a personalului clinicii.</p>
+    </div>
+  </div>
+  <div class="row justify-content-center m-4 mt-md-3 mt-2 fadein animation-duration-300">
+    <div class="col-lg-8">
+      <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+        <div class="col-lg-6 col-md-7 col-sm-8 col-9 bg-teal-200 text-white p-2 text-end rounded pe-3">
+          <h4 class="m-0">Detalii pacient</h4>
+        </div>
+        <div class="row mt-3" formGroupName="pacientDetails">
+          <div class="col-md-6 mt-2">
+            <label for="name" class="fw-bold">Nume pacient complet<span class="star"> *</span></label>
+            <input id="name" type="text" class="w-100" pInputText formControlName="name"
+              placeholder="Nume și prenume" [ngClass]="{
+                'ng-invalid ng-dirty': name.invalid && name.touched
+              }" />
+            <div *ngIf="name.invalid && name.touched">
+              <span class="form-text" *ngIf="name.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="
+                  name.hasError('maxlength')
+                ">Ați depășit limita maximă de 48 de caractere.</span>
+            </div>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label for="phoneNumber" class="fw-bold">Telefon<span class="star"> *</span></label>
+            <input id="phoneNumber" type="text" class="w-100" pInputText formControlName="phoneNumber"
+              placeholder="Telefon" pattern="\d*" [ngClass]="{
+                'ng-invalid ng-dirty':
+                  phoneNumber.invalid && phoneNumber.touched
+              }" />
+            <div *ngIf="phoneNumber.invalid && phoneNumber.touched">
+              <span class="form-text" *ngIf="phoneNumber.hasError('required')">Câmpul este obligatoriu.</span>
+              <span class="form-text" *ngIf="phoneNumber.hasError('maxlength') || phoneNumber.hasError('minlength')">Câmpul trebuie sa aibă 10 caractere.</span>
+              <span class="form-text" *ngIf="phoneNumber.hasError('pattern')">Sunt permise doar cifre.</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-7 col-sm-8 col-9 bg-teal-200 text-white p-2 text-end mt-md-5 mt-4 rounded pe-3">
+          <h4 class="m-0">Detalii programare</h4>
+        </div>
+        <div class="row mt-3" formGroupName="appointmentDetails">
+          <div class="col-md-6 mt-2">
+            <label for="specialty" class="fw-bold">Specialitate<span class="star"> *</span></label>
+            <p-dropdown id="specialty" [filter]="true" (onChange)="onUpdateDoctors()" [resetFilterOnHide]="true" [showClear]="true" [options]="specialtyOptions" optionLabel="name" styleClass="w-100" formControlName="specialty"
+              placeholder="Toate specializările"></p-dropdown>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label for="doctor" class="fw-bold">Medic<span class="star"> *</span></label>
+            <p-dropdown id="doctor" [filter]="true" [resetFilterOnHide]="true" [options]="doctorsOptions" optionLabel="name" styleClass="w-100" formControlName="doctor"
+              placeholder="Alege un medic" [ngClass]="{
+                'ng-invalid ng-dirty': doctor.invalid && doctor.touched
+              }"></p-dropdown>
+            <div *ngIf="doctor.invalid && doctor.touched">
+              <span class="form-text" *ngIf="doctor.hasError('required')">Câmpul este obligatoriu.</span>
+            </div>
+          </div>
+          <div class="col-md-6 mt-2">
+            <label for="date" class="fw-bold">Dată<span class="star"> *</span></label>
+            <p-calendar [showIcon]="true" inputId="icon" inputId="date" styleClass="w-100" formControlName="date"
+              placeholder="Alege data programării" [minDate]="minDateValue" [ngClass]="{
+                'ng-invalid ng-dirty': date.invalid && date.touched
+              }"></p-calendar>
+            <div *ngIf="date.invalid && date.touched">
+              <span class="form-text" *ngIf="date.hasError('required')">Câmpul este obligatoriu.</span>
+            </div>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label for="mesaj" class="fw-bold">Mesaj</label>
+            <textarea id="mesaj" rows="8" pInputTextarea class="w-100" formControlName="message"></textarea>
+          </div>
+        </div>
+        <p class="mt-3">* În cel mai scurt timp posibil veți fi contactat de către noi pentru a stabili mai multe detalii despre programarea facută.</p>
+        <div class="row">
+          <div class="col-12 mt-3 mb-md-2">
+            <button pButton type="submit" label="Trimite" class="w-100 float-right"></button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

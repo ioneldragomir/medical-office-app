@@ -1,0 +1,36 @@
+<nav>
+  <div class="bg-teal-400 w-100 text-white px-6 py-2">
+    <p class="p-0 m-0">Interval programări * Luni - Vineri * Orele 8:00 - 16:00</p>
+  </div>
+  <div class="navbar navbar-expand-md navbar-light">
+    <div class="container-fluid">
+      <div class="cursor-pointer">
+        <a class="navbar-brand ms-2" routerLink="/"><i class="fa-solid fa-house-chimney-medical me-2"></i>CHOAM</a>
+      </div>
+      <button class="navbar-toggler" type="button" appDropdown #r="appDropdown">
+        <i class="fa-solid fa-caret-down mx-2"></i>
+      </button>
+      <div class="collapse navbar-collapse" [ngClass]="{ show: r.isOpen }" id="navbarLight">
+        <ul class="navbar-nav me-auto ps-2 justify-content-end w-75">
+          <li class="nav-item m-0">
+            <a class="nav-link cursor-pointer text-gray-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/">Acasă</a>
+          </li>
+          <li class="nav-item m-0">
+            <a class="nav-link cursor-pointer text-gray-500" routerLinkActive="active" routerLink="/medici">Medici</a>
+          </li>
+          <li class="nav-item m-0">
+            <a class="nav-link cursor-pointer text-gray-500" routerLinkActive="active" routerLink="/programari">Programări</a>
+          </li>
+          <li class="nav-item m-0">
+            <a class="nav-link cursor-pointer text-gray-500" routerLinkActive="active" routerLink="/contact">Contact</a>
+          </li>
+        </ul>
+        <div class="p-lg-3">
+          <button pButton pRipple type="button" label="CONECTEAZĂ-TE" class="p-button-sm login-btn"
+          [ngClass]="innerWidth >= 768 ? '': 'mt-2 w-100'" (click)="onNavigate()"></button>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</nav>

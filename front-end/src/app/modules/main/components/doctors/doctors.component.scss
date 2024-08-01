@@ -1,0 +1,22 @@
+.round-image {
+  border-radius: 50%;
+}
+
+.description-area-border {
+  border-left: 8px var(--teal-200) solid;
+  border-right: 8px var(--teal-200) solid;
+}
+
+::ng-deep .p-accordion-header-link  {
+  background-color: white !important;
+  border: 0 !important;
+  font-weight: normal !important;
+  margin-top: 20px;
+}
+
+::ng-deep .p-accordion-content {
+  border: 0 !important;
+  padding: 0 !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}

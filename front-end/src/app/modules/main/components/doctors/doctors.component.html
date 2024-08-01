@@ -1,0 +1,98 @@
+<div class="col-12 m-0 p-0" style="min-height: 88vh">
+  <div class="row title-borders">
+    <div class="col-lg-4 col-md-5 col-sm-6 col-7 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Medici clinică</h3>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-3 fadein animation-duration-300">
+    <div class="col-lg-12 col-xl-10">
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+        <div class="row p-1">
+          <div class="col-lg-6 mt-2">
+            <p-dropdown id="specialty" [showClear]="true" [filter]="true" [options]="specialtyOptions" [resetFilterOnHide]="true" optionLabel="name" formControlName="specialty" styleClass="w-100" placeholder="Căutare după specializare">
+            </p-dropdown>
+          </div>
+          <div class="col-lg-6 mt-2">
+            <p-dropdown id="hierarchy" [showClear]="true" [options]="hierarchyOptions" [resetFilterOnHide]="true"  optionLabel="name" formControlName="hierarchy" styleClass="w-100" placeholder="Căutare după ierarhie">
+            </p-dropdown>
+          </div>
+          <div class="col-lg-6 mt-2 p-input-icon-right">
+            <input id="name" type="text" class="w-100" pInputText placeholder="Căutare după nume" formControlName="name">
+            <i class="pi pi-search pe-3"></i>
+          </div>
+          <div class="col-lg-6 mt-2">
+            <button pButton type="submit" label="Caută" class="w-100 float-right"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row p-4 justify-content-center fadein animation-duration-300" *ngIf="doctors && !doctors.length">
+    <div class="col-12 text-center">
+      <p class="">Momentan nu există medici</p>
+    </div>
+  </div>
+  <div class="row p-4 justify-content-center fadein animation-duration-300">
+    <div class="col-lg-8 col-md-12">
+      <p-accordion expandIcon="" collapseIcon="">
+        <p-accordionTab *ngFor="let medic of filteredDoctors">
+          <ng-template pTemplate="header">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <img src="assets/images/doctor-image.png" [alt]="getFullName(medic.lastName, medic.firstName)"
+                  class="img-fluid round-image">
+              </div>
+              <div class="col-sm-7">
+                  <h6 class="fs-4 fw-bold text-teal-400 m-0">{{getFullName(medic.lastName, medic.firstName)}}</h6>
+                  <p class="fs-5 text-teal-200 m-0">Medic {{medic.hierarchy}}</p>
+                  <p class="m-0">Specialitate: <span class="fw-bold text-teal-400">{{medic.specialty | specialty}}</span></p>
+              </div>
+              <div class="col-sm-3">
+                    <p class=" text-teal-400 text-end">Detalii medic <i class="ps-2 fa-solid fa-caret-down"></i></p>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content">
+            <div class="row align-items-center px-4 rounded-bottom justify-content-center">
+              <div class="col-12 p-0">
+                <div class="row mb-2 bg-teal-200 text-white p-2 rounded">
+                  <div class="col-sm-6">
+                    <span class="fw-bold">Email</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{medic.email}}</span>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-sm-6">
+                    <span class="fw-bold">Număr de telefon</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{medic.phoneNumber}}</span>
+                  </div>
+                </div>
+                <div class="row mb-2 bg-teal-200 text-white p-2 rounded">
+                  <div class="col-sm-6">
+                    <span class="fw-bold">Educație</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{medic.education ? medic.education : 'Nespecificat'}}</span>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-sm-6">
+                    <span class="fw-bold">Experienta</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <span>{{medic.experience ? (medic.experience + ' ani')  : 'Nespecificat' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-accordionTab>
+    </p-accordion>
+    </div>
+  </div>
+ 
+</div>

@@ -1,0 +1,20 @@
+.icon-red {
+  color: var(--red-300) !important;
+}
+
+::ng-deep p-password input.p-inputtext {
+  width: 100% !important; 
+}
+
+::ng-deep p-password > div {
+  position: relative;
+  display: inline-flex;
+}
+
+::ng-deep p-password i {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  right: 0.75rem;
+  color: #6c757d;
+}

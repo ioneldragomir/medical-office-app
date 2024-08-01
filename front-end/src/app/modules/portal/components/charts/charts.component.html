@@ -1,0 +1,39 @@
+<div class="col-12 m-0 p-0">
+  <div class="row title-borders">
+    <div class="col-12 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Statistici</h3>
+    </div>
+    <div class="col-sm-12 mt-4 m-0 p-0">
+      <div class="row m-0 p-0">
+        <div class="col-sm-4">
+          <p-button [icon]="activeState[0] ? 'pi pi-minus' : 'pi pi-plus'" (click)="toggle(0)" styleClass="p-button-text p-button-sm w-100" label="Grafic programări"></p-button>
+        </div>
+        <div class="col-sm-4">
+          <p-button [icon]="activeState[1] ? 'pi pi-minus' : 'pi pi-plus'" (click)="toggle(1)" styleClass="p-button-text p-button-sm mt-2 mt-sm-0 w-100" label="Grafic conturi"></p-button>
+        </div>
+        <div class="col-sm-4">
+          <p-button [icon]="activeState[2] ? 'pi pi-minus' : 'pi pi-plus'" (click)="toggle(2)" styleClass="p-button-text p-button-sm mt-2 mt-sm-0 w-100" label="Grafic mesaje"></p-button>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <div class="row fadein animation-duration-300 justify-content-center">
+    <div class="col-10 p-0" style="min-height: 80.9vh;">
+      <p-accordion [multiple]="true" styleClass="border-none mb-5" >
+        <p-accordionTab [(selected)]="activeState[0]" header="Numărul de programări realizate grupate pe lunile anului" [selected]="true">
+           <p-chart type="bar" [data]="appointmentsData" [options]="appointmentsOptions"></p-chart>
+        </p-accordionTab>
+        <p-accordionTab [(selected)]="activeState[1]" header="Numărul de conturi existente grupate după tipul de utilizator">
+          <div class="text-center row justify-content-center">
+            <div class="col-sm-8 col-12">
+              <p-chart type="pie" [data]="accountsData"></p-chart>
+            </div>
+          </div>
+        </p-accordionTab>
+        <p-accordionTab [(selected)]="activeState[2]" header="Numărul de mesaje primite grupate pe lunile anului">
+          <p-chart type="bar" [data]="messagesData" [options]="messagesOptions"></p-chart>  
+        </p-accordionTab>
+    </p-accordion>
+    </div>
+  </div>
+

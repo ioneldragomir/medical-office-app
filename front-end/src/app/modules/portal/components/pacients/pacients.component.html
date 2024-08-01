@@ -1,0 +1,159 @@
+<div class="col-12 m-0 p-0">
+  <div class="row title-borders">
+    <div class="col-6 bg-teal-200">
+      <i (click)="toggleAddEmployee()" pTooltip="Adaugă"
+        class="fadein animation-duration-300 fa-solid fa-circle-plus mr-2 text-white text-5xl pt-1 pl-2 cursor-pointer"></i>
+    </div>
+    <div class="col-6 bg-teal-200 text-white p-2 text-end">
+      <h3 class="m-0 p-2 fw-bold">Pacienți</h3>
+    </div>
+  </div>
+  <div class="row fadein animation-duration-300">
+    <div class="col-12 m-0 p-0">
+      <p-table #dt [value]="pacients" responsiveLayout="scroll" [loading]="isLoading" [rows]="10"
+        [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [rowHover]="true"
+        [globalFilterFields]="['lastName','firstName', 'phoneNumber', 'email']">
+        <ng-template pTemplate="caption">
+          <div class="row justify-content-end">
+            <div class="col-12 p-0 ps-3 flex align-items-center">
+              <p class="fw-bold m-0 p-0 fs-5">Filtrare</p>
+              <i class="fa-solid fa-filter ml-2"></i>
+            </div>
+            <p-divider styleClass="m-0 mb-3"></p-divider>
+            <div class="col-lg-12">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input pInputText #input type="text" class="w-100" (input)="filterGlobal($event, 'startsWith')"
+                  placeholder="Căutare" />
+              </span>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center" pSortableColumn="lastName">Nume<p-sortIcon field="lastName"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="firstName">Prenume<p-sortIcon field="firstName"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="email">Email<p-sortIcon field="email"></p-sortIcon>
+            </th>
+            <th class="text-center" pSortableColumn="phoneNumber">Telefon<p-sortIcon field="phoneNumber"></p-sortIcon>
+            </th>
+            <th class="text-center">Opțiuni</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pacient>
+          <tr>
+            <td class="text-center">{{pacient.lastName}}</td>
+            <td class="text-center">{{pacient.firstName}}</td>
+            <td class="text-center">{{pacient.email ? pacient.email : 'nu există email'}}</td>
+            <td class="text-center">{{pacient.phoneNumber}}</td>
+            <td class="text-center">
+              <button pButton pRipple icon="fa-solid fa-circle-info" class="mr-2 p-button-text text-orange-300 fs-5"
+                pTooltip="Detalii" (click)="viewItem(pacient)"></button>
+              <button pButton pRipple icon="fa-solid fa-circle-xmark" class="icon-red p-button-danger p-button-text fs-5 mr-2"
+                pTooltip="Șterge" (click)="deleteItem(pacient)"></button>
+              <button *ngIf="user.type !== 'doctor'" pButton pRipple icon="fa-solid fa-circle-arrow-right" class="text-blue-400 p-button-info p-button-text fs-5"
+                pTooltip="Vezi programări" (click)="selectAppointments(pacient)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="this.numberOfCols">
+              Nu există pacienți
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-dialog [header]="dialogHeader" [dismissableMask]="true" [(visible)]="isDialogVisible"
+      [breakpoints]="{'2000px': '50vw', '960px': '75vw', '640px': '95vw'}" [style]="{width: '25vw'}"
+        [modal]="true">
+          <form [formGroup]="pacientForm" class="fadein animation-duration-300">
+            <div class="row mb-3">
+              <div class="col-md-6 mt-2">
+                <label for="lastName" class="fw-bold">Nume<span class="star"> *</span></label>
+                <input id="lastName" type="text" class="w-100" pInputText formControlName="lastName"
+                  placeholder="Numele" [ngClass]="{
+                    'ng-invalid ng-dirty': lastName.invalid && lastName.touched
+                  }" />
+                <div *ngIf="lastName.invalid && lastName.touched">
+                  <span class="form-text" *ngIf="lastName.hasError('required')">Câmpul este obligatoriu.</span>
+                  <span class="form-text" *ngIf="
+                  lastName.hasError('maxlength')
+                    ">Ați depășit limita maximă de 24 de caractere.</span>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2">
+                <label for="firstName" class="fw-bold">Prenume<span class="star"> *</span></label>
+                <input id="firstName" type="text" class="w-100" pInputText formControlName="firstName"
+                  placeholder="Prenumele" [ngClass]="{
+                    'ng-invalid ng-dirty': firstName.invalid && firstName.touched
+                  }" />
+                <div *ngIf="firstName.invalid && firstName.touched">
+                  <span class="form-text" *ngIf="firstName.hasError('required')">Câmpul este obligatoriu.</span>
+                  <span class="form-text" *ngIf="
+                  firstName.hasError('maxlength')
+                    ">Ați depășit limita maximă de 24 de caractere.</span>
+                </div>
+              </div>
+              <div class="col-md-6 mt-2">
+                <label for="phoneNumber" class="fw-bold">Telefon<span class="star"> *</span></label>
+                <input id="phoneNumber" type="text" class="w-100" pInputText formControlName="phoneNumber"
+                  placeholder="Telefon" pattern="\d*" [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      phoneNumber.invalid && phoneNumber.touched
+                  }" />
+                <div *ngIf="phoneNumber.invalid && phoneNumber.touched">
+                  <span class="form-text" *ngIf="phoneNumber.hasError('required')">Câmpul este obligatoriu.</span>
+                  <span class="form-text"
+                    *ngIf="phoneNumber.hasError('maxlength') || phoneNumber.hasError('minlength')">Câmpul trebuie sa
+                    aibă
+                    10 caractere.</span>
+                  <span class="form-text" *ngIf="phoneNumber.hasError('pattern')">Sunt permise doar cifre.</span>
+                </div>
+              </div>
+              <div class="col-md-12 mt-2" *ngIf="mode !== 'add'">
+                <label for="email" class="fw-bold">Email</label>
+                <input type="email" id="email" pInputText class="w-100" formControlName="email"
+                  placeholder="email@test.com" [ngClass]="{
+                    'ng-invalid ng-dirty': email.invalid && email.touched
+                  }" />
+                <div *ngIf="email.invalid && email.touched">
+                  <span class="form-text" *ngIf="email.hasError('taken')">Emailul este deja folosit.</span>
+                  <span class="form-text" *ngIf="
+                      email.hasError('email') && !email.hasError('maxlength')
+                    ">Emailul trebuie să fie valid.</span>
+                  <span class="form-text" *ngIf="email.hasError('maxlength')">Ați depășit limita maximă de 52 de
+                    caractere.</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        <ng-template pTemplate="footer">
+          <div class="p-3">
+            <div class="div">
+              <div class="row justify-content-end m-0 p-0" *ngIf="this.mode === 'view'">
+                <div class="col-md-6 col-12 m-0 p-0">
+                  <button pButton type="button" label="Modificare date" class="w-100" (click)="onToggleEdit()"></button>
+                </div>
+              </div>
+              <div class="row justify-content-end m-0 p-0" *ngIf="this.mode === 'edit'">
+                <div class="col-md-6 col-12 m-0 pt-0 ps-0 pb-0">
+                  <button pButton type="button" label="Renunțare" class="w-100 p-button-danger"
+                    (click)="onCancelEdit()"></button>
+                </div>
+                <div class="col-md-6 col-12 m-0 p-0">
+                  <button pButton type="button" label="Confirmare" class="w-100 p-button-success"
+                    (click)="onSubmit()"></button>
+                </div>
+              </div>
+            </div>
+            <button *ngIf="this.mode === 'add'" pButton type="button" label="Adăugare" class="w-100"
+              (click)="onSubmit()"></button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="min-vh-100 container-fluid">
+  <div class="p-2 bg-white px-4 px-md-4 flex justify-content-between align-items-center">
+    <div class="d-block d-xl-none">
+      <p-button (click)="sidebarVisible = true" icon="fa-solid fa-bars"
+        styleClass="m-0 bg-teal-200 border-0"></p-button>
+    </div>
+    <p class="fs-5 text-center fs-3 fw-bold p-2 rounded m-0 d-none d-xl-block">
+      Portal
+    </p>
+    <div class="flex align-items-center gap-3 ms-auto">
+      <p class="fw-bold m-0">
+        {{ this?.fullName }}
+      </p>
+      <img src="assets/images/doctor-image.png" (click)="op.toggle($event)" height="40"
+        class="cursor-pointer border-circle" />
+    </div>
+  </div>
+  <p-sidebar [(visible)]="sidebarVisible">
+    <div class="p-3">
+      <p-menu [model]="items"></p-menu>
+    </div>
+  </p-sidebar>
+  <div class="row align-items-start p-0">
+    <div class="col-2 d-none d-xl-block p-0 mx-auto">
+      <p-menu [model]="items"></p-menu>
+    </div>
+    <div class="col-xl-9 col-12 p-0 mx-auto">
+      <p-overlayPanel #op>
+        <ng-template pTemplate>
+          <div class="p-1 flex">
+            <img height="240" src="assets/images/doctor-image.png" />
+            <div class="px-3">
+              <p class="text-white bg-teal-400 fs-5 fw-bold text-center rounded m-0 p-2">
+                {{ this?.fullName }}
+              </p>
+              <p class="fs-5 text-center bg-teal-100 p-2 mb-4 rounded">
+                {{ user?.type }}
+              </p>
+              <p-button label="Profil" styleClass="w-100 mb-2 bg-teal-300 border-0" iconPos="right"
+                icon="fa-solid fa-user-gear" (onClick)="navigate()"></p-button>
+              <p-button label="Deconectare" styleClass="w-100 p-button-danger bg-red-300 border-0" iconPos="right"
+                icon="fa-solid fa-arrow-right-from-bracket" (onClick)="logout()"></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-overlayPanel>
+      <div class="row m-0 p-0 h-100" #maindiv>
+        <p-toast [breakpoints]="{ '768px': { width: '80%' } }"></p-toast>
+        <p-confirmDialog #cd [breakpoints]="{ '768px': { width: '80%' } }" header="Confirmare"
+          icon="pi pi-exclamation-triangle">
+          <ng-template pTemplate="footer">
+            <div class="row py-3 px-4">
+              <div class="col-sm-6 col-12">
+                <button type="button" class="w-100 p-button-danger border-none" style="background-color: var(--red-400)"
+                  pButton icon="pi pi-times" label="Anulare" (click)="cd.reject()"></button>
+              </div>
+              <div class="col-sm-6 col-12">
+                <button type="button" class="w-100 p-button-success border-none bg-green-400" pButton icon="pi pi-check"
+                  label="Confirmare" (click)="cd.accept()"></button>
+              </div>
+            </div>
+          </ng-template>
+        </p-confirmDialog>
+
+        <div class="card border-none height-main">
+            
+            <router-outlet></router-outlet>
+        </div>
+      </div>
+     
+    </div>
+    <p class="text-center m-0 p-2">
+      Copyright <i class="fa-solid fa-copyright"></i> 2022 Dragomir Ionel.
+      Toate drepturile sunt rezervate.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.bg-home {
+  background-image: url(../../../../../assets/images/bg-home.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 460px;
+}
+
+.bg-home-text {
+  background-color: rgba(0,0,0, 0.3); 
+  color: white;
+  text-align: end;
+  padding: 20px;
+}
+
+.home-card {
+  min-height: 200px;
+}
+
+.text-format {
+  text-align: justify;
+  text-justify: inter-word;
+  text-indent: 50px;
+}
