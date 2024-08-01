@@ -1,33 +1,63 @@
-### Repository changed from the initial one
+# Application Overview
 
-The application uses `node` and `npm` for running and installing all the dependencies.
-All of the names and other information are fictitious and intended for example purposes.
-
-
+This application utilizes `node` and `npm` for running and installing all dependencies. All names and other information are fictitious and intended for example purposes.
 
 ## FrontEnd
 
 ### Description
-See clinic details, doctors, make an appointment, contact us, make an account...
-Login to see more... appointments, patients and employees management pages, contact messages page and app statistics page.
+The frontend allows users to:
+- View clinic details and doctor information
+- Make appointments
+- Contact the clinic
+- Create an account and log in for additional features
 
-### Portal login
-To see the portal module create a patient account... to see the pacient pov of the app, or use `admin@admin.com` email and `admin1` password to login into an admin account for more modules.
+Logged-in users can access:
+- Appointment management
+- Patient and employee management
+- Contact messages
+- App statistics
 
-### Run app
-Go to web app directory `cd front-end`
-Install all the dependencies used by the application `npm i`
-Use `npm start` to start the app
-Go to `http://localhost:4200/` in the browser to see the app
+### Portal Login
+To access the portal module:
+- Create a patient account to view the patient perspective, or
+- Use the following admin credentials for additional modules:
+  - **Email:** `admin@admin.com`
+  - **Password:** `admin1`
 
+### How to Run the App
+1. Navigate to the web app directory:
+   ```sh
+   cd front-end
+   ```
+2. Install all dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the app:
+   ```sh
+   npm start
+   ```
+4. Open your browser and go to `http://localhost:4200/` to view the app.
 
+## BackEnd
 
-## BackEnd 
-
-### Run server
-Go to server directory `cd back-end`
-Use `npm i` to install necessary node packages
-Use `npm start` to start the server
+### How to Run the Server
+1. Navigate to the server directory:
+   ```sh
+   cd back-end
+   ```
+2. Install the necessary node packages:
+   ```sh
+   npm install
+   ```
+3. Start the server:
+   ```sh
+   npm start
+   ```
 
 ### Database
-The database of the application is `database.db`. Here are stored details related to: appointments. employees, patients and contact messages.
+The application uses `database.db` to store details related to:
+- Appointments
+- Employees
+- Patients
+- Contact messages
